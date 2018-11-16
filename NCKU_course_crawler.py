@@ -34,6 +34,3 @@ all_major[k] = pd.DataFrame(major,columns = ["major_name", "major_number","numbe
 
 print(all_major['{}'.format(k)])
 
-
-
-
