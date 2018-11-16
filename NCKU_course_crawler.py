@@ -8,33 +8,31 @@ all_major = {}
 major = []
 course = []
 
-for k in major_need_crawl:
+crawling_semes = input("input 1 or 2 semester :")
+k = input("input major number :")
+if crawling_semes == '2':
+    r = session.get('http://course-query.acad.ncku.edu.tw/qry/qry002.php?syear=0106&sem=2&college_no=&dept_no={}'.format(k))
+elif crawling_semes == '1':
     r = session.get('http://course-query.acad.ncku.edu.tw/qry/qry001.php?dept_no={}'.format(k))
-    r.encoding = 'utf-8'
-    res = r.html.find('thead tr th')
-    
+else :
+    print('please enter 1 or 2 !')
+r.encoding = 'utf-8'
+res = r.html.find('thead tr th')    
 
-    for i in range(1,5):
-        resp = r.html.find('.course_y{} td'.format(i))
-        for j in range(len(resp)):
-            if (j+1) % len(res)==0 and j!=0:
+for i in range(1,5):
+    resp = r.html.find('.course_y{} td'.format(i))
+    for j in range(len(resp)):
+        if (j+1) % len(res)==0 and j!=0:
         
-                course.append(str(resp[j].text))
-                major.append(course.copy())
-                course.clear()
-            else:
-                course.append(str(resp[j].text))
+            course.append(str(resp[j].text))
+            major.append(course.copy())
+            course.clear()
+        else:
+            course.append(str(resp[j].text))
     
-    all_major[k] = pd.DataFrame(major,columns = ["major_name", "major_number","number", "course_number", "class_number", "class", "grade", "sort", "group", "en_class", "class_name", "class_type", "credit","teacher_name", "select_people", "remain_number", "time","classroom", "note", "select_condition", "teacher_from_companies","class_number", "diff_num","Moocs"])
-    
+all_major[k] = pd.DataFrame(major,columns = ["major_name", "major_number","number", "course_number", "class_number", "class", "grade", "sort", "group", "en_class", "class_name", "class_type", "credit","teacher_name", "select_people", "remain_number", "time","classroom", "note", "select_condition", "teacher_from_companies","class_number", "diff_num","Moocs"])
 
-j = json.dumps(all_major)
-print(j)
-    
-    
-# with open('couse_clawer.json', 'w') as fp:
-#     json.dump(all_major, fp,ensure_ascii=False)
-
+print(all_major['{}'.format(k)])
 
 
 
